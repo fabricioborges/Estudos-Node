@@ -1,7 +1,16 @@
-const express = require('express')
-
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors')
+const routes = require('./routes');
 const server = express();
 
-server.get('/users')
+server.use(express.json());
+server.use(cors());
+server.use(routes);
 
-server.listen(3333)
+mongoose.connect('mongodb://localhost:27017/Tindev', {
+    useNewUrlParser: true,
+    useUnifiedTopology: true 
+});
+
+server.listen(3333);
