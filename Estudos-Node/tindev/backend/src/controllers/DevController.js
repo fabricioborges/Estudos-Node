@@ -24,6 +24,7 @@ module.exports = {
         const userExists = await Dev.findOne({ user: username });
 
         if (userExists) {
+            console.log("user login: ", userExists.name);
             return res.json(userExists);
         };
 
@@ -39,6 +40,8 @@ module.exports = {
             likes: [],
             dislikes: []
         });
+
+        console.log("user login: ", dev.name);
 
         return res.json(dev);
     }
