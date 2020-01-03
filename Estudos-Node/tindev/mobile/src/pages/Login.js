@@ -22,7 +22,7 @@ export default function Login({navigation}) {
 
         const {_id} = response.data;
 
-        await AsyncStorage.setItem('user', {user: _id});
+        await AsyncStorage.setItem('user',  _id);
 
         navigation.navigate('Main', {user: _id})
     }
