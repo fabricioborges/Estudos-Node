@@ -2,15 +2,36 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors')
 const routes = require('./routes');
-const server = express();
+const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 
-server.use(express.json());
-server.use(cors());
-server.use(routes);
+
+const connectedUsers = {};
+
+io.on('connection', socket => {
+    const {user} = socket.handshake.query;
+
+    console.log(user, socket.id);
+
+    connectedUsers[user] = socket.id;
+});
 
 mongoose.connect('mongodb://localhost:27017/Tindev', {
     useNewUrlParser: true,
     useUnifiedTopology: true 
 });
+
+app.use((req, res, next) =>{
+    req.io = io;
+    req.connectedUsers = connectedUsers;
+
+    return next();
+});
+
+app.use(express.json());
+app.use(cors());
+app.use(routes);
+
 
 server.listen(3333);
